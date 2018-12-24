@@ -38,7 +38,6 @@ var app = new Vue({
             this.bgPage.clearArr();
         },
         download: function() {
-            alert(111)
             this.bgPage.downloadImage('image');
         }
     }
