@@ -11,14 +11,9 @@ var app = new Vue({
         bgPage: chrome.extension.getBackgroundPage()
     },
     created(){
-        this.imageArr = this.bgPage.sendSource('image');
-        this.init();
-        
+         this.sendMessageToContentScript({action:'getsource'},this.response);
     },
     methods: {
-        init: function() {
-            this.sourceList = this.imageArr;
-        },
         tabsTapHandle: function(obj) {
             this.selectedId = obj.id;
             this.left = `${obj.id * 140}px`;
@@ -30,15 +25,23 @@ var app = new Vue({
                 this.sourceList = this.scriptArr;
             }
         },
-        clear: function() {
-            this.imageArr = [];
-            this.styleArr = [];
-            this.scriptArr = [];
-            this.sourceList = [];
-            this.bgPage.clearArr();
-        },
         download: function() {
-            this.bgPage.downloadImage('image');
+            this.bgPage.downloadImage(this.sourceList);
+        },
+        sendMessageToContentScript(message, callback){
+            chrome.tabs.query({active: true, currentWindow: true}, function(tabs)
+            {
+                chrome.tabs.sendMessage(tabs[0].id, message, function(response)
+                {
+                    if(callback) callback(response);
+                });
+            });
+        },
+        response: function(response) {
+            this.imageArr = response.imageArr;
+            this.styleArr = response.styleArr;
+            this.scriptArr = response.scriptArr;
+            this.sourceList = this.imageArr;
         }
     }
 })

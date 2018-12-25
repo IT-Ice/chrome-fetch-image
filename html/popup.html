@@ -20,13 +20,13 @@
         </div>
         <ul class="source-list">
             <li class="list-item" v-for="item in sourceList">
-                <img class="source-img" :src="item.purl" alt="">
+                <img class="source-img" :type="item.type" :src="item.purl" alt="">
                 <span></span>
             </li>
             <p class="empty-tips" v-show="sourceList.length === 0">暂无数据</p>
         </ul>
         <div class="footer">
-            <span class="clear" @click="clear">清空</span>
+            <!-- <span class="clear" @click="clear">清空</span> -->
             <span class="download" @click="download">下载</span>
         </div>
     </div>
